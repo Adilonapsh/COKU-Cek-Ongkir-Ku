@@ -1,0 +1,63 @@
+import { Request, Response, Router } from 'express';
+import { getLocationToBitwiseAPI, getShippingPrises, getTrackingDetails } from './cekongkir.service'
+import { limiter } from '../middleware/rate-limiter';
+import { RatesShipping } from '../interface/interface'
+
+export const cekOngkirRoute: Router = Router();
+
+
+cekOngkirRoute.use(limiter);
+
+cekOngkirRoute.use('/location', async (req: Request, res: Response) => {
+    try {
+        const { input } = await req.query;
+        const data = await getLocationToBitwiseAPI(input?.toString());
+        res.json({
+            code: 200,
+            message: 'Data berhasil diambil',
+            data: data.areas
+        });
+    } catch (err: any) {
+        res.json({ code: 404, message: err.message });
+    }
+});
+
+cekOngkirRoute.use('/trackings', async (req: Request, res: Response) => {
+    try {
+        const { receipt_number, courier } = await req.query;
+        const data = await getTrackingDetails(receipt_number?.toString(), courier?.toString());
+        res.json({
+            code: 200,
+            message: 'Data berhasil diambil',
+            data: data
+        });
+    } catch (err: any) {
+        res.json({ code: 404, message: err.message });
+    }
+});
+
+cekOngkirRoute.use('/rates', async (req: Request, res: Response) => {
+    try {
+        const { origin_area_id, destination_area_id, couriers, weight, height, length, width } = await req.query;
+        const data = await getShippingPrises(
+            origin_area_id?.toString(),
+            destination_area_id?.toString(),
+            couriers?.toString(),
+            weight?.toString(),
+            height?.toString(),
+            length?.toString(),
+            width?.toString()
+        );
+        res.json({
+            code: 200,
+            message: 'Data berhasil diambil',
+            data: data
+        });
+    } catch (err: any) {
+        res.json({ code: 404, message: err.message });
+    }
+});
+
+cekOngkirRoute.use('/s', async (req: Request, res: Response) => {
+    res.send({ code: 200, message: 'success' })
+})
