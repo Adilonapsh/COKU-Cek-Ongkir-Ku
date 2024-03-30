@@ -8,9 +8,10 @@ dotenv.config();
 const app: Application = express();
 
 const appName: string = process.env.APP_NAME || 'My Website';
+const port = process.env?.PORT;
 
 app.use(router)
 
-app.listen(3000, () => {
-    console.log(appName + ' listening on port 3000!')
+app.listen(port, () => {
+    console.log(appName + ' listening on port ' + port)
 })

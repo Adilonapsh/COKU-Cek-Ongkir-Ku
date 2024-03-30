@@ -6,12 +6,14 @@ import { RatesShipping } from '../interface/interface'
 export const cekOngkirRoute: Router = Router();
 
 
-cekOngkirRoute.use(limiter);
+// cekOngkirRoute.use(limiter);
 
 cekOngkirRoute.use('/location', async (req: Request, res: Response) => {
     try {
         const { input } = await req.query;
         const data = await getLocationToBitwiseAPI(input?.toString());
+        res.setHeader('Access-Control-Allow-Origin', '*'); // Anda bisa mengubah '*' dengan origin yang diizinkan secara spesifik
+        res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
         res.json({
             code: 200,
             message: 'Data berhasil diambil',
@@ -48,6 +50,8 @@ cekOngkirRoute.use('/rates', async (req: Request, res: Response) => {
             length?.toString(),
             width?.toString()
         );
+        res.setHeader('Access-Control-Allow-Origin', '*'); // Anda bisa mengubah '*' dengan origin yang diizinkan secara spesifik
+        res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
         res.json({
             code: 200,
             message: 'Data berhasil diambil',

@@ -43,8 +43,8 @@ const getShippingPrises = async (
 ) => {
     const data = await axios.post(baseUrl + '/rates/couriers',
         {
-            "origin_area_id": "IDNP9IDNC74IDND6715IDZ16121",
-            "destination_area_id": "IDNP9IDNC74IDND6715IDZ16122",
+            "origin_area_id": origin_area_id,
+            "destination_area_id": destination_area_id,
             "couriers": couriers,
             "items": [
                 {
